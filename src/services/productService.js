@@ -12,3 +12,12 @@ export const getAllProducts = (token) => {
         }
     });
 };
+
+//Remove a product by id
+export const removeProductById = (productId, token) => {
+    return axios.delete(`${API_URL}/${productId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  };

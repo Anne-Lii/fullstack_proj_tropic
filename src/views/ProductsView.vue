@@ -15,6 +15,8 @@
               <p><strong>Kategori:</strong> {{ product.category_name }}</p>
               <p><strong>Pris:</strong> {{ product.price }} kr</p>
               <p><strong>Lagersaldo:</strong> {{ product.stock }}</p>
+              <button class="edit_btn">&#9998; Redigera</button>
+              <button class="remove_btn" @click="removeProduct(product._id)">&#10060; Ta bort</button>
             </div>
           </li>
       </ul>
@@ -25,7 +27,7 @@
 </template>
   
 <script>
-  import { getAllProducts } from '../services/productService';
+  import { getAllProducts, removeProductById } from '../services/productService';
 
   export default {
 
@@ -37,10 +39,12 @@
         token: '' 
       };
     },
+
     methods: {
+
+      //Get all products
       async fetchProducts() {
         try {
-
           //Get token from localstorage
           this.token = localStorage.getItem('token');
           const response = await getAllProducts(this.token);
@@ -51,8 +55,23 @@
           this.loading = false;
         }
       },
-      logout() {
 
+      //remove product
+      async removeProduct(productId) {
+      try {
+        //Send DELETE-request to delete a product
+        await removeProductById(productId, this.token);
+
+        //Remove produkt from list
+        this.products = this.products.filter(product => product._id !== productId);
+      } catch (error) {
+        console.error('Fel vid borttagning av produkt:', error);
+      }
+    },
+
+
+    //Logout
+      logout() {
       //Remove token when logout
       localStorage.removeItem('token');
 
