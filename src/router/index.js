@@ -10,7 +10,16 @@ const routes = [
   {
     path: '/products',
     name: 'Products',
-    component: ProductsView
+    component: ProductsView,
+
+    beforeEnter: (to, from, next) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        next('/login'); //If no token exist redirect to /login
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/login',
