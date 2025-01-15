@@ -1,4 +1,8 @@
 <template>
+  <div>
+    <router-link to="/add-product">Lägg till produkt</router-link>
+    <router-link to="/add-category">Lägg till kategori</router-link>
+  </div>
   <nav>
     <button @click="logout">Logga ut</button>
   </nav>
