@@ -26,7 +26,7 @@
         <label for="category">Kategori</label>
         <select v-model="newProduct.category_name" id="category">
           <option value="" disabled>Välj kategori</option>
-          <option v-for="category in categories" :key="category.name" :value="category.name">
+          <option v-for="category in categories" :key="category._name" :value="category.name">
             {{ category.name }}
           </option>
         </select>
@@ -71,6 +71,7 @@
 
       //add a new product
       async addProduct() {
+        console.log("Kategori vald:", this.newProduct.category_name);//DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (!this.newProduct.stock || this.newProduct.stock <= 0) {
           alert("Lagret måste vara större än 0.");
           return;
@@ -100,7 +101,7 @@
           };
 
           const response = await addProduct(productData, token); //send product data with token
-
+         
           //Reset form 
           this.newProduct = {
             common_name: '',
@@ -110,11 +111,13 @@
             stock: 0
           };
 
+          
           alert("Produkt tillagd!");
-          this.$router.push('/products'); //Redirect to /products
+          this.$router.push('/products'); //Redirect to productpage
         } catch (error) {
-          console.error('Fel vid tillägg av produkt:', error.response ? error.response.data : error.message);
-          alert("Det gick inte att lägga till produkten. Försök igen.");
+          const errorMessage = error.response ? error.response.data.message : 'Det gick inte att lägga till produkten. Försök igen.';
+          console.error('Fel vid tillägg av produkt:', errorMessage);
+          alert(errorMessage);
         }
       }
 

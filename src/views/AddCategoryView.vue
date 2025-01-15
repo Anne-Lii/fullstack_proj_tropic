@@ -1,4 +1,8 @@
 <template>
+  <div class="router_menu">
+    <router-link to="/add-product">Lägg till produkt</router-link>
+    <router-link to="/products">Produktsidan</router-link>
+  </div>
   <main>
     <div>
       <h1>Kategorier</h1>

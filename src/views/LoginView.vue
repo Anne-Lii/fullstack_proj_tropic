@@ -1,7 +1,7 @@
 <template>
     <div class="center-login">
       
-        <img :src="logo" id="logotyp" alt="logotyp moorish idol-fisk med texten TROPIC REEF under">    
+          
     
         <label for="email">E-post:</label>
         <input type="email" id="email" v-model="email" placeholder="Ange din e-post" required>
@@ -19,7 +19,7 @@
 
 <script>
     import axios from 'axios';
-    import logo from '@/assets/logo1.png';
+   
 
     export default {
         data() {
@@ -32,10 +32,12 @@
         methods: {
             async login() {
             try {
+                console.log("Skickar inloggningsdata:", { email: this.email, password: this.password }); // Debugging
                 const response = await axios.post('https://projekt-webbtjanst-api-anne-lii.onrender.com/user/login', {
                 email: this.email,
                 password: this.password
                 });
+                console.log("Laddar...");
 
                 // Spara token i localStorage
                 localStorage.setItem('token', response.data.token);

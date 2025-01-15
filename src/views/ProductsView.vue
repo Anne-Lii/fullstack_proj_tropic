@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="router_menu">
     <router-link to="/add-product">Lägg till produkt</router-link>
     <router-link to="/add-category">Lägg till kategori</router-link>
   </div>
@@ -33,7 +33,7 @@
                 <button type="button" @click="increaseStock(product)">+</button>
               </p>
 
-              <button class="edit_btn" @click="openEditModal(product)">Redigera</button>
+              <button class="edit_btn" @click="openEditModal(product)">&#9998; Redigera</button>
               <button class="remove_btn" @click="removeProduct(product._id)">&#10060; Ta bort</button>
             </div>
           </li>
