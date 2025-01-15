@@ -19,6 +19,16 @@
         />
       </div>
 
+      <!-- Category Filter -->
+      <div>
+        <select v-model="categoryFilter" @change="filterProducts">
+          <option value="">Alla Kategorier</option>
+          <option v-for="category in categories" :key="category" :value="category">
+            {{ category }}
+          </option>
+        </select>
+      </div>
+
       <div v-if="loading">Laddar produkter...</div>
       <div v-else>
         <ul v-if="filteredProducts.length">
@@ -91,6 +101,8 @@
         products: [],
         filteredProducts: [],
         searchQuery: '',
+        categoryFilter: '',
+        categories: [],
         loading: true,
         token: '',
         showModal:false,
@@ -103,10 +115,12 @@
       //Get all products
       async fetchProducts() {
         try {
-          // Get token from localstorage
           this.token = localStorage.getItem('token');
           const response = await getAllProducts(this.token);
           this.products = response.data;
+
+          // Extract unique categories from the products
+          this.categories = [...new Set(this.products.map(product => product.category_name))]; // Extract unique categories
           this.filteredProducts = this.products; // Initially, all products are displayed
         } catch (error) {
           console.error('Fel vid hämtning av produkter:', error);
@@ -115,19 +129,26 @@
         }
       },
 
-      // Filter products based on search query
+      //Filter products based on search query and selected category
       filterProducts() {
-        // If searchQuery is empty, show all products
-        if (this.searchQuery.trim() === '') {
-          this.filteredProducts = this.products;
-        } else {
-          // Filter products based on the search query (case-insensitive)
-          this.filteredProducts = this.products.filter(product =>
+        let filtered = this.products;
+
+        // Apply search query filter
+        if (this.searchQuery.trim() !== '') {
+          filtered = filtered.filter(product =>
             product.common_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
             product.latin_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
             product.category_name.toLowerCase().includes(this.searchQuery.toLowerCase())
           );
         }
+
+        // Apply category filter
+        if (this.categoryFilter) {
+          filtered = filtered.filter(product => product.category_name === this.categoryFilter);
+        }
+
+        this.filteredProducts = filtered;
+        
       },
 
       //remove product
