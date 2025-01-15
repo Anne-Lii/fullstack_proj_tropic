@@ -1,4 +1,8 @@
 <template>
+   <div class="router_menu">
+    <router-link to="/add-category">Lägg till kategori</router-link>
+    <router-link to="/products">Produktsidan</router-link>
+  </div>
   <div>
     <h1>Lägg till ny produkt</h1>
     <form @submit.prevent="addProduct">

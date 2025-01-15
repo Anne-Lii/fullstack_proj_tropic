@@ -11,4 +11,10 @@ export const addCategory = (category) => {
 export const getCategories = () => {
     return apiClient.get(API_URL);
 };
+
+//Remove a category with DELETE-method using category_name
+export const removeCategory = (categoryName) => {
+    // Send a DELETE request to remove category by name
+    return apiClient.delete(`${API_URL}/${categoryName}`);
+};
   

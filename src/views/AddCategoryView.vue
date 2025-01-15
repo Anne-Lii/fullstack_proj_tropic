@@ -6,12 +6,12 @@
   <main>
     <div>
       <h1>Kategorier</h1>
-      <h2>+ Lägg till kategori</h2>
+      <h2>Lägg till kategori</h2>
       <form @submit.prevent="addCategory">
         <label for="category_name">Kategori namn:</label>
         <input v-model="newCategory.name" id="category_name" type="text" required />
   
-        <button type="submit">Lägg till kategori</button>
+        <button type="submit">+ Lägg till kategori</button>
       </form>
     </div>
     <!-- List with all categories -->
@@ -20,6 +20,9 @@
       <ul>
         <li v-for="category in categories" :key="category._id">
           {{ category.name }}
+          
+          <button class="remove_btn" @click="removeCategory(category.name)">&#10060; Ta bort</button>
+
         </li>
       </ul>
     </div>
@@ -27,7 +30,7 @@
 </template>
   
 <script>
-  import { addCategory, getCategories } from '../services/categoryService';
+  import { addCategory, getCategories, removeCategory } from '../services/categoryService';
 
   export default {
     data() {
@@ -63,7 +66,21 @@
         } catch (error) {
           console.error('Fel vid tillägg av kategori:', error);
         }
+      },
+      
+      // Method to remove a category based on category_name
+      async removeCategory(categoryName) {
+        try {
+          //Call removeCategory function with categoryName
+          await removeCategory(categoryName);
+          
+          //Update the categories list after deletion
+          this.categories = this.categories.filter(category => category.name !== categoryName);
+        } catch (error) {
+          console.error('Fel vid borttagning av kategori:', error);
+        }
       }
+
     },
     created() {
       this.loadCategories(); //Get all categories on page init
