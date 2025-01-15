@@ -1,88 +1,108 @@
 <template>
-  <div class="router_menu">
-    <router-link to="/add-product">Lägg till produkt</router-link>
-    <router-link to="/add-category">Lägg till kategori</router-link>
-  </div>
-  <nav>
-    <button @click="logout">Logga ut</button>
-  </nav>
-  <main>
-    <div>
-      <h1>Produkter</h1>
-      <!-- Searchfield -->
-      <div>
-        <input 
-          v-model="searchQuery" 
-          type="text" 
-          placeholder="Sök produkt..." 
-          @input="filterProducts"
-        />
-      </div>
-
-      <!-- Category Filter -->
-      <div>
-        <select v-model="categoryFilter" @change="filterProducts">
-          <option value="">Alla Kategorier</option>
-          <option v-for="category in categories" :key="category" :value="category">
-            {{ category }}
-          </option>
-        </select>
-      </div>
-
-      <div v-if="loading">Laddar produkter...</div>
-      <div v-else>
-        <ul v-if="filteredProducts.length">
-          <li v-for="product in filteredProducts" :key="product._id" class="product-item">
-            <div>
-              <strong>{{ product.common_name }}</strong> 
-              <p><em>{{ product.latin_name }}</em></p>
-              <p><strong>Kategori:</strong> {{ product.category_name }}</p>
-              <p><strong>Pris:</strong> {{ product.price }} kr</p>
-
-              <!-- Stock adjustments -->
-              <p>
-                <strong>Lagersaldo:</strong>
-                <button type="button" @click="decreaseStock(product)" :disabled="product.stock <= 0">-</button>
-                <input 
-                  type="number" 
-                  v-model="product.stock" 
-                  min="0" 
-                  @blur="updateStock(product)" 
-                  @input="updateStock(product)" 
-                />
-                <button type="button" @click="increaseStock(product)">+</button>
-              </p>
-
-              <button class="edit_btn" @click="openEditModal(product)">&#9998; Redigera</button>
-              <button class="remove_btn" @click="removeProduct(product._id)">&#10060; Ta bort</button>
-            </div>
-          </li>
-        </ul>
-        <p v-else>Inga produkter hittades.</p>
-      </div>
+  <div class="container">
+    <div class="d-flex justify-content-between mb-4">
+      <router-link to="/add-product" class="btn btn-secondary">Lägg till produkt</router-link>
+      <router-link to="/add-category" class="btn btn-secondary">Lägg till kategori</router-link>
     </div>
-  </main>
+    <nav>
+      <button @click="logout" class="btn btn-danger">Logga ut</button>
+    </nav>
+    <main>
+      <div class="my-4">
+        <h1>Produkter</h1>
+        <!-- Searchfield -->
+        <div class="mb-3">
+          <input 
+            v-model="searchQuery" 
+            type="text" 
+            class="form-control" 
+            placeholder="Sök produkt..." 
+            @input="filterProducts"
+          />
+        </div>
 
-  <!-- Modal to update product -->
-  <div v-if="showModal" class="modal">
-    <div class="modal-content">
-      <span class="close" @click="closeEditModal">&times;</span>
-      <h2>Redigera Produkt</h2>
-      <form @submit.prevent="saveProduct">
-        <label for="common_name">Vanligt namn:</label>
-        <input v-model="editProduct.common_name" id="common_name" type="text" required />
+        <!-- Category Filter -->
+        <div class="mb-3">
+          <select v-model="categoryFilter" @change="filterProducts" class="form-select">
+            <option value="">Alla Kategorier</option>
+            <option v-for="category in categories" :key="category" :value="category">
+              {{ category }}
+            </option>
+          </select>
+        </div>
 
-        <label for="latin_name">Latinskt namn:</label>
-        <input v-model="editProduct.latin_name" id="latin_name" type="text" required />
+        <!-- Loading message -->
+        <div v-if="loading" class="alert alert-info">Laddar produkter...</div>
 
-        <label for="category_name">Kategori:</label>
-        <input v-model="editProduct.category_name" id="category_name" type="text" required />
+        <!-- Products list -->
+        <div v-else>
+          <ul v-if="filteredProducts.length" class="list-group">
+            <li v-for="product in filteredProducts" :key="product._id" class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{{ product.common_name }}</strong> 
+                <p><em>{{ product.latin_name }}</em></p>
+                <p><strong>Kategori:</strong> {{ product.category_name }}</p>
+                <p><strong>Pris:</strong> {{ product.price }} kr</p>
 
-        <label for="price">Pris:</label>
-        <input v-model="editProduct.price" id="price" type="number" required />
+                <!-- Stock adjustments -->
+                <p>
+                  <strong>Lagersaldo:</strong>
+                  <button type="button" @click="decreaseStock(product)" :disabled="product.stock <= 0" class="btn btn-outline-secondary btn-sm"> - </button>
+                  <input 
+                    type="number" 
+                    v-model="product.stock" 
+                    min="0" 
+                    class="form-control d-inline-block w-auto" 
+                    @blur="updateStock(product)" 
+                    @input="updateStock(product)" 
+                  />
+                  <button type="button" @click="increaseStock(product)" class="btn btn-outline-secondary btn-sm"> + </button>
+                </p>
 
-        <button type="submit">Spara</button>
-      </form>
+                <div class="btn-group" role="group">
+                  <button class="btn btn-secondary" @click="openEditModal(product)">&#9998; Redigera</button>
+                  <button class="btn btn-secondary" @click="removeProduct(product._id)">&#10060; Ta bort</button>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+          <p v-else>Inga produkter hittades.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal to update product -->
+    <div v-if="showModal" class="modal fade show" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: block;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <span class="close" @click="closeEditModal">&times;</span>
+          <h2 class="modal-title">Redigera Produkt</h2>
+          <form @submit.prevent="saveProduct" class="p-4">
+            <div class="mb-3">
+              <label for="common_name" class="form-label">Vanligt namn:</label>
+              <input v-model="editProduct.common_name" id="common_name" type="text" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="latin_name" class="form-label">Latinskt namn:</label>
+              <input v-model="editProduct.latin_name" id="latin_name" type="text" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="category_name" class="form-label">Kategori:</label>
+              <input v-model="editProduct.category_name" id="category_name" type="text" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="price" class="form-label">Pris:</label>
+              <input v-model="editProduct.price" id="price" type="number" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Spara</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -157,10 +177,14 @@
           //Send DELETE-request to remove a product
           await removeProductById(productId, this.token);
 
-          //Remove produkt from list
+          //Remove produkt from products and filteredproducts
           this.products = this.products.filter(product => product._id !== productId);
+          this.filteredProducts = this.filteredProducts.filter(product => product._id !== productId);
+
+          alert('Produkten har tagits bort');
         } catch (error) {
           console.error('Fel vid borttagning av produkt:', error);
+          alert('Något gick fel vid borttagning av produkt');
         }
       },
       

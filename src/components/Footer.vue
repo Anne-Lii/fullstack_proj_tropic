@@ -1,16 +1,33 @@
 <template>
-    <footer>
+    <div class="container">
+      <footer class="text-white text-center py-3">
         <div class="center_footer">
-            © 2025 Anne-Lii Gesar Hansen
+          © 2025 Anne-Lii Gesar Hansen
         </div>
-    </footer> 
+      </footer> 
+    </div>
   </template>
   
   <script>
-   
+    
   </script>
-    
-  <style scoped>
   
+  <style scoped>
+    .container {
+      margin-bottom: 200px; /* Ensures space at the bottom */
+    }
+  
+    footer {
+      background-color: #07445E;
+      height: 100px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+  
+    .center_footer {
+      line-height: 100px; /* Vertically center text */
+    }
   </style>
-    
+  
