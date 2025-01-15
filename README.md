@@ -1,29 +1,58 @@
-# spa_vue
+# Tropic Reef - Lagerhanteringssystem
 
-This template should help get you started developing with Vue 3 in Vite.
+Anne-Lii Hansen anha2324@student.miun.se
 
-## Recommended IDE Setup
+## Om projektet
+Tropic Reef är en fiktiv butik för import av saltvattensfiskar. De behövde ett lagerhanteringssystem där man kan lista alla produkter, skapa nya produkter, uppdatera befintliga produkter, ta bort produkter samt ändra antal i lager.  Även lägga till och ta bort kategorier.  I frontend applikationen finns även funktionalitet för att söka och filtrera på produkter. Detta är frontend applikationen i systemet.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Tech
+* Frontend: Vue.js
+* Routing: Vue Router
+* Autentisering: JSON Web Token (JWT)
+* HTTP-bibliotek: Axios
+* CSS Framework Bootstrap
 
-## Customize configuration
+## Funktionalitet
+* Visa en lista med produkter och deras detaljer (namn, kategori, pris, lagerstatus).
+* Lägga till nya produkter
+* Uppdatera befintliga produkter
+* Ta bort produkter
+* Justera lagersaldo för varje produkt
+* Visa en lista med kategorier
+* Lägga till nya kategorier
+* Ta bort kategorier
+* Dynamisk filtrering av produkter baserat på sökord och kategori
+* Användarinloggning och JWT-token för autentisering
+* Modal för att redigera produktinformation
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Installation 
 
-## Project Setup
+```sh
+'git clone https://github.com/Webbutvecklings-programmet/projekt---klient-applikation-Anne-Lii.git'
 
+cd projekt---klient-applikation-Anne-Lii
+```
+
+Installera beroenden:
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
+Starta utvecklingsserver:
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Användning av API
+Denna applikation kommunicerar med ett redan publicerat backend-API, som du hittar på följande URL:
+https://projekt-webbtjanst-api-anne-lii.onrender.com/
 
-```sh
-npm run build
-```
+ För att kommunicera med API:t används Axios för att göra HTTP-anrop:
+
+* GET /products: Hämta alla produkter
+* GET /categories: Hämta alla kategorier
+* POST /products: Skapa en ny produkt
+* POST /categories: Skapa en ny kategori
+* PUT /products/{id}: Uppdatera en produkt
+* DELETE /products/{id}: Ta bort en produkt
+* DELETE /category/{id}: Ta bort en kategori
+* PATCH /products/{id}/stock: Justera lagersaldo för en produkt
