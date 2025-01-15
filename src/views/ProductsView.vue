@@ -9,10 +9,20 @@
   <main>
     <div>
       <h1>Produkter</h1>
+      <!-- Searchfield -->
+      <div>
+        <input 
+          v-model="searchQuery" 
+          type="text" 
+          placeholder="Sök produkt..." 
+          @input="filterProducts"
+        />
+      </div>
+
       <div v-if="loading">Laddar produkter...</div>
       <div v-else>
-        <ul v-if="products.length">
-          <li v-for="product in products" :key="product._id" class="product-item">
+        <ul v-if="filteredProducts.length">
+          <li v-for="product in filteredProducts" :key="product._id" class="product-item">
             <div>
               <strong>{{ product.common_name }}</strong> 
               <p><em>{{ product.latin_name }}</em></p>
@@ -79,6 +89,8 @@
     data() {
       return {
         products: [],
+        filteredProducts: [],
+        searchQuery: '',
         loading: true,
         token: '',
         showModal:false,
@@ -91,14 +103,30 @@
       //Get all products
       async fetchProducts() {
         try {
-          //Get token from localstorage
+          // Get token from localstorage
           this.token = localStorage.getItem('token');
           const response = await getAllProducts(this.token);
           this.products = response.data;
+          this.filteredProducts = this.products; // Initially, all products are displayed
         } catch (error) {
           console.error('Fel vid hämtning av produkter:', error);
         } finally {
           this.loading = false;
+        }
+      },
+
+      // Filter products based on search query
+      filterProducts() {
+        // If searchQuery is empty, show all products
+        if (this.searchQuery.trim() === '') {
+          this.filteredProducts = this.products;
+        } else {
+          // Filter products based on the search query (case-insensitive)
+          this.filteredProducts = this.products.filter(product =>
+            product.common_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            product.latin_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            product.category_name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
         }
       },
 
