@@ -37,6 +37,11 @@ const routes = [
     path: '/add-category',
     name: 'AddCategory',
     component: AddCategory
+  },
+  //Catch-all route to handle invalid paths and redirect to login
+  {
+    path: '/:pathMatch(.*)*', 
+    redirect: '/login'  // Redirects to login for any undefined routes
   }
 ];
 
@@ -46,6 +51,5 @@ const router = createRouter({
   routes
 });
 
-console.log(import.meta.env.BASE_URL);//DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 export default router;
