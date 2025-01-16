@@ -56,6 +56,15 @@
         padding: 30px;
         margin-top: 200px;
     }
+
+    @media screen and (max-width: 800px) {
+        .center-login {
+        font-size: 18px;
+        margin-top: 50px;
+    }
+
+    }
+
     img {
         max-width: 150px;
         margin-top: 100px;
