@@ -36,29 +36,63 @@
         <!-- Products list -->
         <div class="container">
           <ul v-if="filteredProducts.length" class="list-group">
-            <li v-for="product in filteredProducts" :key="product._id" class="list-group-item d-flex justify-content-between align-items-start">
-              <!-- Produktinformation -->
-              <div class="product-info" style="flex-grow: 1; width: 70%;">
-                <strong>{{ product.common_name }}</strong>
-                <p><em>{{ product.latin_name }}</em></p>
-                <p><strong>Kategori:</strong> {{ product.category_name }}</p>
-                <p><strong>Pris:</strong> {{ product.price }} kr</p>
+            <li
+  v-for="product in filteredProducts"
+  :key="product._id"
+  class="list-group-item"
+>
+  <div class="row align-items-center">
+    <!-- Produktinformation -->
+    <div class="col-12 col-md-8 mb-3 mb-md-0">
+      <strong>{{ product.common_name }}</strong>
+      <p><em>{{ product.latin_name }}</em></p>
+      <p><strong>Kategori:</strong> {{ product.category_name }}</p>
+      <p><strong>Pris:</strong> {{ product.price }} kr</p>
+      <div class="d-flex align-items-center">
+        <strong>Lagersaldo:</strong>
+        <button
+          type="button"
+          @click="decreaseStock(product)"
+          :disabled="product.stock <= 0"
+          class="btn btn-sl btn-sm text-white ms-2 me-2"
+        >
+          -
+        </button>
+        <input
+          type="number"
+          v-model="product.stock"
+          min="0"
+          class="form-control form-control-sm text-center"
+          style="width: 100px;"
+          @blur="updateStock(product)"
+          @input="updateStock(product)"
+        />
+        <button
+          type="button"
+          @click="increaseStock(product)"
+          class="btn btn-sl btn-sm text-white ms-2"
+        >
+          +
+        </button>
+      </div>
+    </div>
 
-                <!-- stockadjustments -->
-                <p>
-                  <strong>Lagersaldo:</strong>
-                  <button type="button" @click="decreaseStock(product)" :disabled="product.stock <= 0" class="btn btn-sl text-white"> - </button>
-                  <input type="number" v-model="product.stock" min="0" class="form-control d-inline-block w-auto" @blur="updateStock(product)" @input="updateStock(product)" />
-                  <button type="button" @click="increaseStock(product)" class="btn btn-sl text-white"> + </button>
-                </p>
-              </div>
-
-              <!-- Buttons for edit and remove -->
-              <div class="product-actions" style="width: 30%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;">
-                <button class="btn text-white" @click="openEditModal(product)">&#9998; Redigera</button>
-                <button class="btn text-white" @click="removeProduct(product._id)">&#10060; Ta bort</button>
-              </div>
-            </li>
+    <!-- Actions -->
+    <div class="col-12 col-md-4 text-md-end">
+      <div class="d-flex flex-md-column justify-content-md-between">
+        <button
+          class="btn btn-sm text-white me-2 me-md-0 mb-2 mb-md-0"
+          @click="openEditModal(product)"
+        >
+          &#9998; Redigera
+        </button>
+        <button class="btn btn-sm text-white" @click="removeProduct(product._id)">
+          &#10060; Ta bort
+        </button>
+      </div>
+    </div>
+  </div>
+</li>
           </ul>
           <p v-else>Inga produkter hittades.</p>
         </div>
