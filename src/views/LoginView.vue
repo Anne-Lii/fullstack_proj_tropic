@@ -71,16 +71,17 @@
         background-color: #44bbee;
     }
 
+    /* CSS for smaller screens */
     @media screen and (max-width: 800px) {
         .center-login {
-        font-size: 18px;
-        width: 80%;
-        margin-top: 50px;
+            font-size: 18px;
+            width: 80%;
+            margin-top: 20px;
         }
     
         img {
-            max-width: 120px;
-            margin-top: 30px;
+            max-width: 100px;
+            margin-top: 10px;
         }
     }
 </style>
