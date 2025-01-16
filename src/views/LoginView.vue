@@ -57,14 +57,7 @@
         margin-top: 200px;
     }
 
-    @media screen and (max-width: 800px) {
-        .center-login {
-        font-size: 18px;
-        margin-top: 50px;
-    }
-
-    }
-
+    
     img {
         max-width: 150px;
         margin-top: 100px;
@@ -76,6 +69,19 @@
     }
     button:hover {
         background-color: #44bbee;
+    }
+
+    @media screen and (max-width: 800px) {
+        .center-login {
+        font-size: 18px;
+        width: 80%;
+        margin-top: 50px;
+        }
+    
+        img {
+            max-width: 120px;
+            margin-top: 30px;
+        }
     }
 </style>
   
