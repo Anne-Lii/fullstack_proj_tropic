@@ -18,7 +18,8 @@
     }
   
     footer {
-      background-color: #07445E;
+      font-family: 'Poppins', sans-serif;
+      background-color: #104057;
       height: 100px;
       position: fixed;
       bottom: 0;

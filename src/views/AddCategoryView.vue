@@ -1,33 +1,56 @@
+
 <template>
-  <div class="router_menu">
-    <router-link to="/add-product">Lägg till produkt</router-link>
-    <router-link to="/products">Produktsidan</router-link>
+  <div class="d-flex justify-content-center mb-5">
+    <router-link to="/products" class="btn text-white">Produkter</router-link>
+    <router-link to="/add-product" class="btn text-white">Lägg till produkt</router-link>
+    <button @click="logout" class="btn text-white">Logga ut</button>
   </div>
+
   <main>
-    <div>
-      <h1>Kategorier</h1>
-      <h2>Lägg till kategori</h2>
-      <form @submit.prevent="addCategory">
-        <label for="category_name">Kategori namn:</label>
-        <input v-model="newCategory.name" id="category_name" type="text" required />
-  
-        <button type="submit">+ Lägg till kategori</button>
+    <!-- Centrerad container -->
+    <div class="container d-flex flex-column align-items-center">
+      <h1 class="text-center mb-4">Kategorier</h1>
+      <h2 class="text-center mb-4">Lägg till kategori</h2>
+      <form @submit.prevent="addCategory" class="w-100">
+        <div class="mb-3">
+          <label for="category_name" class="form-label">Kategori namn:</label>
+          <input v-model="newCategory.name" id="category_name" type="text" class="form-control" required />
+        </div>
+        <button type="submit" class="btn  text-white w-100">+ Lägg till kategori</button>
       </form>
     </div>
-    <!-- List with all categories -->
-    <div>
-      <h3>Alla kategorier</h3>
-      <ul>
-        <li v-for="category in categories" :key="category._id">
-          {{ category.name }}
-          
-          <button class="remove_btn" @click="removeCategory(category.name)">&#10060; Ta bort</button>
 
+    <!-- Kategorilista centrerad -->
+    <div class="category-list container mt-5">
+      <h3 class="text-center mb-4">Alla kategorier</h3>
+      <ul class="list-unstyled">
+        <li v-for="category in categories" :key="category._id" class="d-flex justify-content-between align-items-center mb-3">
+          <span>{{ category.name }}</span>
+          <button class="remove_btn btn text-white" @click="removeCategory(category.name)">&#10060; Ta bort</button>
         </li>
       </ul>
     </div>
   </main>
 </template>
+
+
+<style scoped>
+  .container {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    width: 100%;
+    max-width: 500px;
+  }
+  .btn {
+    background-color: #104057;
+    margin: 5px;
+  }
+
+  .btn:hover {
+    background-color: #70C7EC;
+  }
+
+</style>
   
 <script>
   import { addCategory, getCategories, removeCategory } from '../services/categoryService';
@@ -79,7 +102,16 @@
         } catch (error) {
           console.error('Fel vid borttagning av kategori:', error);
         }
-      }
+      },
+      
+      // Logout function
+      logout() {
+        // Remove token from localStorage
+        localStorage.removeItem('token');
+        
+        // Redirect to login page
+        this.$router.push('/login');
+      } 
 
     },
     created() {

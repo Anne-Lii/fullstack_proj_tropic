@@ -1,45 +1,74 @@
+
 <template>
-   <div class="router_menu">
-    <router-link to="/add-category">Lägg till kategori</router-link>
-    <router-link to="/products">Produktsidan</router-link>
+  <div class="d-flex justify-content-center mb-5">
+    <router-link to="/products" class="btn text-white">Produkter</router-link>
+    <router-link to="/add-category" class="btn text-white">Lägg till kategori</router-link>
+    <button @click="logout" class="btn text-white">Logga ut</button>
   </div>
-  <div>
-    <h1>Lägg till ny produkt</h1>
-    <form @submit.prevent="addProduct">
-      <div>
-        <label for="commonName">Namn</label>
-        <input v-model="newProduct.common_name" type="text" id="commonName"/>
-      </div>
 
-      <div>
-        <label for="latinName">Latinskt namn</label>
-        <input v-model="newProduct.latin_name" type="text" id="latinName"/>
-      </div>
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="col-md-6"> <!-- Sätter en maxbredd på container -->
+      <h1 class="text-center mb-4">Lägg till ny produkt</h1>
+      <form @submit.prevent="addProduct">
+        <div class="mb-3">
+          <label for="commonName" class="form-label">Namn:</label>
+          <input v-model="newProduct.common_name" type="text" id="commonName" class="form-control" />
+        </div>
 
-      <div>
-        <label for="price">Pris</label>
-        <input v-model="newProduct.price" type="number" id="price" placeholder="Pris" />
-      </div>
+        <div class="mb-3">
+          <label for="latinName" class="form-label">Latinskt namn:</label>
+          <input v-model="newProduct.latin_name" type="text" id="latinName" class="form-control" />
+        </div>
 
-      <div>
-        <label for="stock">Lager</label>
-        <input v-model="newProduct.stock" type="number" id="stock" placeholder="Lager" />
-      </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Pris:</label>
+          <input v-model="newProduct.price" type="number" id="price" class="form-control" placeholder="Pris" />
+        </div>
 
-      <div>
-        <label for="category">Kategori</label>
-        <select v-model="newProduct.category_name" id="category">
-          <option value="" disabled>Välj kategori</option>
-          <option v-for="category in categories" :key="category._name" :value="category.name">
-            {{ category.name }}
-          </option>
-        </select>
-      </div>
+        <div class="mb-3">
+          <label for="stock" class="form-label">Lager:</label>
+          <input v-model="newProduct.stock" type="number" id="stock" class="form-control" placeholder="Lager" />
+        </div>
 
-      <button type="submit">Lägg till produkt</button>
-    </form>
+        <div class="mb-3">
+          <label for="category" class="form-label">Kategori:</label>
+          <select v-model="newProduct.category_name" id="category" class="form-select">
+            <option value="" disabled>Välj kategori</option>
+            <option v-for="category in categories" :key="category._name" :value="category.name">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">+ Lägg till produkt</button>
+      </form>    
+    </div>
   </div>
 </template>
+
+
+
+
+
+<style scoped>
+  .container {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+  }
+  .btn {
+    background-color: #104057;
+    margin: 5px;
+  }
+
+  .btn:hover {
+    background-color: #70C7EC;
+  }
+
+</style>
+
+
+
+
 
 <script>
   import { getCategories } from "@/services/categoryService";  
@@ -123,8 +152,16 @@
           console.error('Fel vid tillägg av produkt:', errorMessage);
           alert(errorMessage);
         }
-      }
-
+      } ,
+      
+      // Logout function
+      logout() {
+        // Remove token from localStorage
+        localStorage.removeItem('token');
+        
+        // Redirect to login page
+        this.$router.push('/login');
+      } 
     }
   };
 </script>

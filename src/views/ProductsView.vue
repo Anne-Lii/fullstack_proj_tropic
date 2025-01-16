@@ -1,12 +1,11 @@
 <template>
   <div class="container">
-    <div class="d-flex justify-content-between mb-4">
-      <router-link to="/add-product" class="btn btn-secondary">Lägg till produkt</router-link>
-      <router-link to="/add-category" class="btn btn-secondary">Lägg till kategori</router-link>
+    <div class="d-flex justify-content-center mb-5">
+      <router-link to="/add-product" class="btn text-white">Lägg till produkt</router-link>
+      <router-link to="/add-category" class="btn text-white">Lägg till kategori</router-link>
+      <button @click="logout" class="btn text-white">Logga ut</button>
     </div>
-    <nav>
-      <button @click="logout" class="btn btn-danger">Logga ut</button>
-    </nav>
+
     <main>
       <div class="my-4">
         <h1>Produkter</h1>
@@ -32,43 +31,38 @@
         </div>
 
         <!-- Loading message -->
-        <div v-if="loading" class="alert alert-info">Laddar produkter...</div>
+        <div v-if="loading" class="alert alert-info" text-white>Laddar produkter...</div>
 
         <!-- Products list -->
-        <div v-else>
+        <div class="container">
           <ul v-if="filteredProducts.length" class="list-group">
-            <li v-for="product in filteredProducts" :key="product._id" class="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{{ product.common_name }}</strong> 
+            <li v-for="product in filteredProducts" :key="product._id" class="list-group-item d-flex justify-content-between align-items-start">
+              <!-- Produktinformation -->
+              <div class="product-info" style="flex-grow: 1; width: 70%;">
+                <strong>{{ product.common_name }}</strong>
                 <p><em>{{ product.latin_name }}</em></p>
                 <p><strong>Kategori:</strong> {{ product.category_name }}</p>
                 <p><strong>Pris:</strong> {{ product.price }} kr</p>
 
-                <!-- Stock adjustments -->
+                <!-- stockadjustments -->
                 <p>
                   <strong>Lagersaldo:</strong>
-                  <button type="button" @click="decreaseStock(product)" :disabled="product.stock <= 0" class="btn btn-outline-secondary btn-sm"> - </button>
-                  <input 
-                    type="number" 
-                    v-model="product.stock" 
-                    min="0" 
-                    class="form-control d-inline-block w-auto" 
-                    @blur="updateStock(product)" 
-                    @input="updateStock(product)" 
-                  />
-                  <button type="button" @click="increaseStock(product)" class="btn btn-outline-secondary btn-sm"> + </button>
+                  <button type="button" @click="decreaseStock(product)" :disabled="product.stock <= 0" class="btn btn-sl text-white"> - </button>
+                  <input type="number" v-model="product.stock" min="0" class="form-control d-inline-block w-auto" @blur="updateStock(product)" @input="updateStock(product)" />
+                  <button type="button" @click="increaseStock(product)" class="btn btn-sl text-white"> + </button>
                 </p>
+              </div>
 
-                <div class="btn-group" role="group">
-                  <button class="btn btn-secondary" @click="openEditModal(product)">&#9998; Redigera</button>
-                  <button class="btn btn-secondary" @click="removeProduct(product._id)">&#10060; Ta bort</button>
-                </div>
-
+              <!-- Buttons for edit and remove -->
+              <div class="product-actions" style="width: 30%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;">
+                <button class="btn text-white" @click="openEditModal(product)">&#9998; Redigera</button>
+                <button class="btn text-white" @click="removeProduct(product._id)">&#10060; Ta bort</button>
               </div>
             </li>
           </ul>
           <p v-else>Inga produkter hittades.</p>
         </div>
+
       </div>
     </main>
 
@@ -106,7 +100,30 @@
     </div>
   </div>
 </template>
-  
+
+
+
+
+<style scoped>
+
+  .container {
+    font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+  }
+  .btn {
+    background-color: #104057;
+    margin: 5px;
+  }
+
+  .btn:hover {
+    background-color: #70C7EC;
+  }
+
+</style>
+
+
+
+
 <script>
  
   import { getAllProducts, removeProductById, updateProductById, updateProductStock } from '../services/productService';
@@ -277,3 +294,4 @@
   };
 
 </script>
+
